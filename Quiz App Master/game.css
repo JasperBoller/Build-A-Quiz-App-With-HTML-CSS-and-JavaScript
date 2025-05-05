@@ -61,19 +61,4 @@
   background-color: #56a5eb;
   width: 0%;
 }
-#timer {
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: #56a5eb;
-  text-align: center;
-  margin: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 50%;
-  width: 6rem;
-  height: 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
