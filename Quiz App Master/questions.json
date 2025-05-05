@@ -22,5 +22,50 @@
     "choice3": "msg('Hello World');",
     "choice4": "alert('Hello World');",
     "answer": 4
+  },
+  {
+    "question": "Which HTML tag is used to link a JavaScript file?",
+    "choice1": "<script href='script.js'>",
+    "choice2": "<link rel='script' src='script.js'>",
+    "choice3": "<script src='script.js'>",
+    "choice4": "<js src='script.js'>",
+    "answer": 3
+  },
+  {
+    "question": "What is the correct syntax for referring to an external script called 'app.js'?",
+    "choice1": "<script name='app.js'>",
+    "choice2": "<script src='app.js'>",
+    "choice3": "<script file='app.js'>",
+    "choice4": "<javascript src='app.js'>",
+    "answer": 2
+  },
+  {
+    "question": "Which of the following is a JavaScript data type?",
+    "choice1": "float",
+    "choice2": "string",
+    "choice3": "number",
+    "choice4": "All of the above",
+    "answer": 4
+  },
+  {
+    "question": "How do you create a function in JavaScript?",
+    "choice1": "function myFunction()",
+    "choice2": "function:myFunction()",
+    "choice3": "create myFunction()",
+    "choice4": "def myFunction()",
+    "answer": 1
+  },
+  {
+    "question": "How do you call a function named 'myFunction' in JavaScript?",
+    "choice1": "call myFunction()",
+    "choice2": "myFunction();",
+    "choice3": "Call.myFunction()",
+    "choice4": "execute myFunction()",
+    "answer": 2
   }
+  
+  
+  
+  
+  
 ]
