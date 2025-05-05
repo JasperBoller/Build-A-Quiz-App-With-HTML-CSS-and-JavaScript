@@ -59,9 +59,10 @@
 #progressBarFull {
   height: 3.4rem;
   background-color: #56a5eb;
-  width: 0%;
+#timer {
+    font-size: 3.5rem;
+    color: #56a5eb;
 }
-
 /* LOADER */
 #loader {
   border: 1.6rem solid white;
@@ -79,4 +80,20 @@
   100% {
     transform: rotate(360deg);
   }
+#category-selection {
+    text-align: center;
+}
+#category-select {
+    width: 30rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    font-size: 1.8rem;
+    border: 0.1rem solid #56a5eb;
+    background-color: white;
+    cursor: pointer;
+}
+#category-select:hover {
+    box-shadow: 0 0.4rem 1.4rem 0 rgba(86, 185, 235, 0.5);
+    transform: translateY(-0.1rem);
+    transition: transform 150ms;
 }
