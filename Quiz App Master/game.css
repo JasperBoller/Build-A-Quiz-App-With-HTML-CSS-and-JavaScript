@@ -61,22 +61,20 @@
   background-color: #56a5eb;
   width: 0%;
 }
-
-/* LOADER */
-#loader {
-  border: 1.6rem solid white;
+/* Timer Styling */
+#timer {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #56a5eb;
+    text-align: center;
+    margin: 1rem;
+    padding: 1rem;
+    background: white;
   border-radius: 50%;
-  border-top: 1.6rem solid #56a5eb;
-  width: 12rem;
-  height: 12rem;
-  animation: spin 2s linear infinite;
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}

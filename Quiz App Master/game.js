@@ -10,12 +10,10 @@ let acceptingAnswers = false;
 let score = 0;
 let questionCounter = 0;
 let availableQuesions = [];
-
-let questions = [];
-
-fetch(
+let timeLeft = 15; // Time per question in seconds
+let timerId = null;
+const timerDisplay = document.getElementById('timer');
     'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'
-)
     .then((res) => {
         return res.json();
     })
@@ -49,7 +47,18 @@ fetch(
 //CONSTANTS
 const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
-
+const startTimer = () => {
+    timeLeft = 15;
+    timerDisplay.textContent = timeLeft;
+    timerId = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timerId);
+            getNewQuestion();
+        }
+    }, 1000);
+};
 startGame = () => {
     questionCounter = 0;
     score = 0;
@@ -65,27 +74,33 @@ getNewQuestion = () => {
         //go to the end page
         return window.location.assign('/end.html');
     }
+    // Clear existing timer if any
+    if (timerId) {
+        clearInterval(timerId);
+    }
     questionCounter++;
     progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
     //Update the progress bar
     progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
-
     const questionIndex = Math.floor(Math.random() * availableQuesions.length);
     currentQuestion = availableQuesions[questionIndex];
     question.innerHTML = currentQuestion.question;
-
     choices.forEach((choice) => {
         const number = choice.dataset['number'];
         choice.innerHTML = currentQuestion['choice' + number];
     });
-
     availableQuesions.splice(questionIndex, 1);
     acceptingAnswers = true;
+    
+    // Start the timer for new question
+    startTimer();
 };
 
 choices.forEach((choice) => {
     choice.addEventListener('click', (e) => {
         if (!acceptingAnswers) return;
+        // Clear the timer when answer is selected
+        clearInterval(timerId);
 
         acceptingAnswers = false;
         const selectedChoice = e.target;
@@ -110,4 +125,8 @@ choices.forEach((choice) => {
 incrementScore = (num) => {
     score += num;
     scoreText.innerText = score;
-};
+}
+
+
+
+
