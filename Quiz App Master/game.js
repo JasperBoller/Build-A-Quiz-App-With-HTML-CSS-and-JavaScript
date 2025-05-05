@@ -1,67 +1,71 @@
-const question = document.getElementById('question');
-const choices = Array.from(document.getElementsByClassName('choice-text'));
-const progressText = document.getElementById('progressText');
-const scoreText = document.getElementById('score');
-const progressBarFull = document.getElementById('progressBarFull');
-const loader = document.getElementById('loader');
-const game = document.getElementById('game');
-let currentQuestion = {};
-let acceptingAnswers = false;
-let score = 0;
-let questionCounter = 0;
-let availableQuesions = [];
+// ... (keep all your existing variable declarations and fetch code)
 
-let questions = [];
-
-fetch(
-    'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'
-)
-    .then((res) => {
-        return res.json();
-    })
-    .then((loadedQuestions) => {
-        questions = loadedQuestions.results.map((loadedQuestion) => {
-            const formattedQuestion = {
-                question: loadedQuestion.question,
-            };
-
-            const answerChoices = [...loadedQuestion.incorrect_answers];
-            formattedQuestion.answer = Math.floor(Math.random() * 4) + 1;
-            answerChoices.splice(
-                formattedQuestion.answer - 1,
-                0,
-                loadedQuestion.correct_answer
-            );
-
-            answerChoices.forEach((choice, index) => {
-                formattedQuestion['choice' + (index + 1)] = choice;
-            });
-
-            return formattedQuestion;
-        });
-
-        startGame();
-    })
-    .catch((err) => {
-        console.error(err);
-    });
-
-//CONSTANTS
+// CONSTANTS
 const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
+let correctAnswersCount = 0; // Track number of correct answers
 
 startGame = () => {
     questionCounter = 0;
     score = 0;
+    correctAnswersCount = 0; // Reset correct answers counter
     availableQuesions = [...questions];
     getNewQuestion();
     game.classList.remove('hidden');
     loader.classList.add('hidden');
 };
 
+// Update the answer checking logic
+choices.forEach((choice) => {
+    choice.addEventListener('click', (e) => {
+        if (!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        const selectedChoice = e.target;
+        const selectedAnswer = selectedChoice.dataset['number'];
+
+        const classToApply =
+            selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+
+        if (classToApply === 'correct') {
+            incrementScore(CORRECT_BONUS);
+            correctAnswersCount++; // Increment correct answers count
+        }
+
+        selectedChoice.parentElement.classList.add(classToApply);
+
+        // Highlight correct answer if wrong was selected
+        if (classToApply === 'incorrect') {
+            const correctChoice = choices.find(
+                choice => choice.dataset['number'] == currentQuestion.answer
+            );
+            correctChoice.parentElement.classList.add('correct');
+        }
+
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply);
+            
+            // Remove correct highlight if it was shown
+            if (classToApply === 'incorrect') {
+                const correctChoice = choices.find(
+                    choice => choice.dataset['number'] == currentQuestion.answer
+                );
+                correctChoice.parentElement.classList.remove('correct');
+            }
+            
+            getNewQuestion();
+        }, 1000);
+    });
+});
+
+// Modify the end game logic to store additional data
 getNewQuestion = () => {
     if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score);
+        localStorage.setItem('correctAnswers', correctAnswersCount);
+        localStorage.setItem('totalQuestions', MAX_QUESTIONS);
+        localStorage.setItem('percentageScore', Math.round((correctAnswersCount / MAX_QUESTIONS) * 100));
+        
         //go to the end page
         return window.location.assign('/end.html');
     }
@@ -83,30 +87,7 @@ getNewQuestion = () => {
     acceptingAnswers = true;
 };
 
-choices.forEach((choice) => {
-    choice.addEventListener('click', (e) => {
-        if (!acceptingAnswers) return;
-
-        acceptingAnswers = false;
-        const selectedChoice = e.target;
-        const selectedAnswer = selectedChoice.dataset['number'];
-
-        const classToApply =
-            selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
-
-        if (classToApply === 'correct') {
-            incrementScore(CORRECT_BONUS);
-        }
-
-        selectedChoice.parentElement.classList.add(classToApply);
-
-        setTimeout(() => {
-            selectedChoice.parentElement.classList.remove(classToApply);
-            getNewQuestion();
-        }, 1000);
-    });
-});
-
+// Keep your existing incrementScore function
 incrementScore = (num) => {
     score += num;
     scoreText.innerText = score;
